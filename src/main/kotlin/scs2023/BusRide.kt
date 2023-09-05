@@ -1,42 +1,40 @@
 package scs2023
 
-import java.io.File
 import kotlin.math.absoluteValue
 
 val console = java.util.Scanner(System.`in`)
-val inputLines = (1..5).map{console.nextLine()}
-//val inputLines = getInputLines("data/BusRide", "example")
-
-val hq = Point.of(inputLines.drop(1).first().substringAfter(" "))
-val homeList = inputLines.drop(2).map { Point.of(it) }
-
-val allLocations = (homeList + hq)
+val numberOfTests = console.nextLine().toInt()
 
 fun main() {
-    println(shortestRoundTrip())
-}
-
-fun shortestRoundTrip(from: Point = hq, pathDone: List<Point> = listOf(from), length: Int = 0): Int {
-    return if (pathDone.size == allLocations.size) {
-//        println("$pathDone ($length) + (${from.distanceTo(hq)}) ")
-        from.distanceTo(hq)
-
-    } else {
-
-        allLocations
-            .filter { location -> location !in pathDone }
-            .minOf { newLocation ->
-                shortestRoundTrip(
-                    newLocation,
-                    pathDone + newLocation,
-                    length + from.distanceTo(newLocation)) + from.distanceTo(newLocation)
-            }
+    repeat(numberOfTests) {
+        testCase()
     }
 }
 
-private fun getInputLines(path: String, fileName: String): List<String> {
-    val file = File("$path/$fileName")
-    return if (file.exists()) file.bufferedReader().readLines() else emptyList()
+fun testCase() {
+    val firstLine = console.nextLine()
+    val numberOfHouses = firstLine.substringBefore(" ").toInt()
+    val inputLines = (1..numberOfHouses).map{console.nextLine()}
+
+    val hq = Point.of(firstLine.substringAfter(" "))
+    val homeList = inputLines.map { Point.of(it) }
+
+    val allocations = (homeList + hq)
+
+    println(allocations.shortestRoundTrip(from=hq))
+}
+
+
+fun List<Point>.shortestRoundTrip(from: Point, final: Point = from, pathDone: List<Point> = listOf(from), length: Int = 0): Int {
+    return if (pathDone.size == this.size) {
+        from.distanceTo(final)
+
+    } else {
+
+        this
+            .filter { location -> location !in pathDone }
+            .minOf { newLocation -> shortestRoundTrip(newLocation, final, pathDone + newLocation, length + from.distanceTo(newLocation)) + from.distanceTo(newLocation) }
+    }
 }
 
 data class Point(val x: Int, val y: Int) {
