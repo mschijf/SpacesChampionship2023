@@ -13,7 +13,10 @@ class BusRide(useConsole: Boolean) {
 
     fun main() {
         repeat(numberOfTests) {
+            val startTime = System.currentTimeMillis()
             testCase()
+            val timePassed = System.currentTimeMillis() - startTime
+            print("Time passed (after %d.%03d sec)".format(timePassed / 1000, timePassed % 1000))
         }
     }
 
@@ -35,23 +38,31 @@ class BusRide(useConsole: Boolean) {
         from: Point,
         final: Point = from,
         pathDone: List<Point> = listOf(from),
-        length: Int = 0
+        length: Int = 0,
+        memoMap: MutableMap<Pair<Point, Set<Point>>, Int> = mutableMapOf()
     ): Int {
-        return if (pathDone.size == this.size) {
-            from.distanceTo(final)
+        if (pathDone.size == this.size) {
+            return from.distanceTo(final)
 
         } else {
 
-            this
+            val memo = memoMap[Pair(from, pathDone.toSet())]
+            if (memo != null)
+                return memo
+
+            val result = this
                 .filter { location -> location !in pathDone }
                 .minOf { newLocation ->
                     shortestRoundTrip(
                         newLocation,
                         final,
                         pathDone + newLocation,
-                        length + from.distanceTo(newLocation)
+                        length + from.distanceTo(newLocation),
+                        memoMap
                     ) + from.distanceTo(newLocation)
                 }
+            memoMap[Pair(from, pathDone.toSet())] = result
+            return result
         }
     }
 
