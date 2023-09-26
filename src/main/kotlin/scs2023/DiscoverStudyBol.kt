@@ -22,29 +22,28 @@ class DiscoverStudyBol(useConsole: Boolean) {
         println(if (isCyclic()) "NO" else "YES")
     }
 
-    // Function to check if cycle exists
+    // Function to check if cycle exists, when walking from startNode
     private fun isCyclicUtil(fromNode: Int,
-                             visited: BooleanArray,
-                             recStack: BooleanArray=BooleanArray(numberOfTracks){false}): Boolean {
+                             visited: MutableSet<Int>,
+                             currentPath: Set<Int> = emptySet()): Boolean {
 
-        if (recStack[fromNode])
+        if (fromNode in currentPath)
             return true
-        if (visited[fromNode])
+        if (fromNode in visited)
             return false
-        visited[fromNode] = true
-        recStack[fromNode] = true
+        visited += fromNode
         val children = trackList[fromNode] ?: emptyList()
         for (c in children)
-            if (isCyclicUtil(c, visited, recStack))
+            if (isCyclicUtil(c, visited, currentPath+fromNode))
                 return true
-        recStack[fromNode] = false
         return false
     }
 
     private fun isCyclic(): Boolean {
-        val visited = BooleanArray(numberOfTracks){false}
+        val visited = mutableSetOf<Int>()
 
-        for (fromNode in 0 until numberOfTracks) {
+        //check from each node, if you can make a cycle
+        for (fromNode in 0..< numberOfTracks) {
             if (isCyclicUtil(fromNode, visited))
                 return true
         }
