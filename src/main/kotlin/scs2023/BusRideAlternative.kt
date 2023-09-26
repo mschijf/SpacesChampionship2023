@@ -16,7 +16,7 @@ class BusRideAlternative(useConsole: Boolean) {
             val startTime = System.currentTimeMillis()
             testCase()
             val timePassed = System.currentTimeMillis() - startTime
-            print("Time passed (after %d.%03d sec)".format(timePassed / 1000, timePassed % 1000))
+            //print("Time passed (after %d.%03d sec)".format(timePassed / 1000, timePassed % 1000))
         }
     }
 

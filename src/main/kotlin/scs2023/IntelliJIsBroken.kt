@@ -4,7 +4,7 @@ import java.io.File
 
 
 fun main() {
-    IntelliJIsBroken(useConsole = false).main()
+    IntelliJIsBroken(useConsole = true).main()
 }
 
 class IntelliJIsBroken(useConsole: Boolean) {
@@ -31,7 +31,7 @@ class IntelliJIsBroken(useConsole: Boolean) {
                 }
                 '}', ']', ')' -> {
                     val top = stack.removeLastOrNull()
-                    if (top != null && bracesMap[top] != ch)
+                    if (top == null || bracesMap[top] != ch)
                         return false
                 }
             }
