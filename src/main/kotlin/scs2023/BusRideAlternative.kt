@@ -9,24 +9,21 @@ fun main() {
 
 class BusRideAlternative(useConsole: Boolean) {
     private val console = getConsole(useConsole)
-    private val numberOfTests = console.nextLine().toInt()
 
     fun main() {
-        repeat(numberOfTests) {
-            val startTime = System.currentTimeMillis()
-            testCase()
-            val timePassed = System.currentTimeMillis() - startTime
-            //print("Time passed (after %d.%03d sec)".format(timePassed / 1000, timePassed % 1000))
-        }
+        val startTime = System.currentTimeMillis()
+        testCase()
+        val timePassed = System.currentTimeMillis() - startTime
+        //print("Time passed (after %d.%03d sec)".format(timePassed / 1000, timePassed % 1000))
     }
 
     private fun testCase() {
-        val firstLine = console.nextLine()
-        val numberOfHouses = firstLine.substringBefore(" ").toInt()
-        val hq = Point.of(firstLine.substringAfter(" "))
-        val homeList = (1..numberOfHouses).map { Point.of(console.nextLine()) }
+        val numberOfLocations = console.nextLine().toInt()
+        val locationList = (1..numberOfLocations).map { Point.of(console.nextLine()) }
+        val hq = locationList.first()
+        val homeList = locationList.drop(1)
 
-        val answer = homeList.minOf { node -> shortestRoute(hq, node, homeList.toSet()) + hq.distanceTo(node) }
+        val answer = homeList.minOfOrNull { node -> shortestRoute(hq, node, homeList.toSet()) + hq.distanceTo(node) } ?: 0
         println(answer)
     }
 

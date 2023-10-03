@@ -4,7 +4,7 @@ import java.io.File
 
 
 fun main() {
-    IntelliJIsBroken(useConsole = true).main()
+    IntelliJIsBroken(useConsole = false).main()
 }
 
 class IntelliJIsBroken(useConsole: Boolean) {
@@ -13,13 +13,11 @@ class IntelliJIsBroken(useConsole: Boolean) {
     private val bracesMap = mapOf('{' to '}', '[' to ']', '(' to ')')
 
     fun main() {
-
-        val firstLine = console.nextLine().toInt()
-        val stringList = (1..firstLine).map{console.nextLine()}
-
-        stringList.forEach {
-            if (it.inBalance()) println("YES") else println("NO")
-        }
+        val line = console.nextLine()
+        if (line.inBalance())
+            println("YES")
+        else
+            println("NO")
     }
 
     private fun String.inBalance(): Boolean {

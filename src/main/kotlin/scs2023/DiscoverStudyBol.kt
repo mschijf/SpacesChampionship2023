@@ -3,19 +3,23 @@ package scs2023
 import java.io.File
 
 fun main() {
-    DiscoverStudyBol(useConsole = false).main()
+    DiscoverStudyBol(useConsole = true).main()
 }
 
 class DiscoverStudyBol(useConsole: Boolean) {
     private val console = getConsole(useConsole)
-    private val numberOfTracks = console.nextLine().toInt()
-    private val trackList = console.nextLine()
-        .drop(1).dropLast(1)
-        .replace("], ", "]-")
-        .split("-")
-        .map{it.drop(1).dropLast(1).split(", ")}
-        .map{Pair(it[0].toInt(), it[1].toInt())}
-        .groupBy ({ it.first}, {it.second })
+    private val numberOfTracks = readLine()!!.toInt()//console.nextLine().toInt()
+    private val numberOfDependencies = readLine()!!.toInt()//console.nextLine().toInt()
+
+    private val dependencyList = (1..numberOfDependencies)
+        .map{
+            readLine()!!
+                .drop(1).dropLast(1)
+                .split(",")
+                .let{ Pair(it[0].trim().toInt(), it[1].trim().toInt()) }
+        }
+
+    private val trackList = dependencyList.groupBy ({ it.first}, {it.second })
 
 
     fun main() {
