@@ -2,6 +2,7 @@ package scs2023
 
 import java.io.File
 import kotlin.math.absoluteValue
+import kotlin.math.round
 
 fun main() {
     BusRideAlternative(useConsole = false).main()
@@ -11,10 +12,17 @@ class BusRideAlternative(useConsole: Boolean) {
     private val console = getConsole(useConsole)
 
     fun main() {
-        val startTime = System.currentTimeMillis()
-        testCase()
-        val timePassed = System.currentTimeMillis() - startTime
-        //print("Time passed (after %d.%03d sec)".format(timePassed / 1000, timePassed % 1000))
+
+        for (volume in 0..9) {
+            val res = round(1 + (volume * 0.1) ).toInt()
+            println("${volume} $res")
+        }
+
+
+//        val startTime = System.currentTimeMillis()
+//        testCase()
+//        val timePassed = System.currentTimeMillis() - startTime
+//        //print("Time passed (after %d.%03d sec)".format(timePassed / 1000, timePassed % 1000))
     }
 
     private fun testCase() {
@@ -23,26 +31,27 @@ class BusRideAlternative(useConsole: Boolean) {
         val hq = locationList.first()
         val homeList = locationList.drop(1)
 
-        val answer = homeList.minOfOrNull { node -> shortestRoute(hq, node, homeList.toSet()) + hq.distanceTo(node) } ?: 0
+        val answer = shortestRoute(hq, hq, homeList.toSet())
         println(answer)
     }
 
-    private fun shortestRoute(hq: Point, firstNodeToVisit: Point, nodesToVisit:Set<Point>, cache: MutableMap<Pair<Point, Set<Point>>, Int> = mutableMapOf()): Int {
-        if (nodesToVisit.size == 1) {
-            return hq.distanceTo(firstNodeToVisit)
+    private val cache: MutableMap<Pair<Point, Set<Point>>, Int> = mutableMapOf()
+
+    private fun shortestRoute(hq: Point, currentNode: Point, nodesToVisit:Set<Point>): Int {
+        if (nodesToVisit.isEmpty()) {
+            return hq.distanceTo(currentNode)
         }
 
-        val memo = cache[Pair(firstNodeToVisit, nodesToVisit)]
+        val memo = cache[Pair(currentNode, nodesToVisit)]
         if (memo != null)
             return memo
 
         val result = nodesToVisit
-            .filter{node -> node != firstNodeToVisit}
             .minOf { node ->
-                shortestRoute(hq, node, nodesToVisit-firstNodeToVisit, cache) + firstNodeToVisit.distanceTo(node)
+                shortestRoute(hq, node, nodesToVisit-node) + currentNode.distanceTo(node)
             }
 
-        cache[Pair(firstNodeToVisit, nodesToVisit)] = result
+        cache[Pair(currentNode, nodesToVisit)] = result
         return result
     }
 

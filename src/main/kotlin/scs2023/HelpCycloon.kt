@@ -18,6 +18,14 @@ class HelpCycloon(useConsole: Boolean) {
         .sortedDescending()
 
 
+    fun main() {
+        val result = bikeTypes.minimalBikeCount(numberOfPackages)
+        if (result >= HUGE)
+            println(-1)
+        else
+            println(result)
+    }
+
     private fun List<Int>.minimalBikeCount(packagesLeft: Int, alreadyCalculated: MutableMap<Int, Int> = mutableMapOf()): Int {
         if (packagesLeft == 0)
             return 0
@@ -35,13 +43,6 @@ class HelpCycloon(useConsole: Boolean) {
         return minimalBikesNeeded
     }
 
-    fun main() {
-        val result = bikeTypes.minimalBikeCount(numberOfPackages)
-        if (result >= HUGE)
-            println(-1)
-        else
-            println(result)
-    }
 
 
     private fun getConsole(useConsole: Boolean) =
