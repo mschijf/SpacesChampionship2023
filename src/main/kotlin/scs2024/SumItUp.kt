@@ -18,8 +18,23 @@ fun main() {
     println("$max $min")
 }
 
+/**
+ * Look at the sum of a serie of 1 + 3 + 5 + 7 + 9 + 11
+ * This is equal to
+ *              1+11 + 3+9 + 5+7
+ *              12   + 12  + 12
+ * In other words:
+ *                (1 + max) * serieLength
+ *                -----------------------
+ *                          2
+ *
+ * with, max = nJumps*jumpSize+1
+ *
+ */
 private fun totalScoreFast(jumpSize: Int, nJumps: Int): Long {
-    return ((nJumps.toLong() + 1L) * (2L + jumpSize.toLong()*nJumps.toLong()) / 2L)
+    val n = nJumps.toLong()
+    val lastSquare = 1L + jumpSize.toLong() * n
+    return (n + 1L) * (1L + lastSquare) / 2L
 }
 
 private fun totalScoreSlow(jumpSize: Int, nJumps: Int): Long {
